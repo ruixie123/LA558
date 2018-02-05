@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by ruixie123 (http://jsbin.com/mimojuv/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+
+<html>
+<head>
+  <title>RUi Xie Assignment 03</title>
+<style>
+    m3{color:black;
+    padding:0
+    margin:0}
+    m5{color:grey
+    padding:0
+    margin:0}
+  </style>
+</head>
+<body>
+  <h3>Assignment 03</h3>
+  <h5>Rui Xie</h5>
+
+  <br>
+  <a href="#" onclick="changeMap('basemapLandcover')">Basemap</a> </br>
+  <br>
+  <a href="#" onclick ="changeMap('iowaBorder')">Iowa Board</a></br>
+  <br>
+<a href="#" onclick="changeMap('nativeAmericanLand')">nativeAmericanLand</a></br>
+<br>
+<a href="#" onclick="changeMap('Interstate')">Interstate Highway</a></br>
+<br>
+<a href="#" onclick="changeMap('vineyards')">Vineyards</a></br>
+
+<img id="myMap" src="images/basemapLandcover.png" alt="basemapLandcover" width ="600" height="400">
+</body>
+<script>
+function changeMap(x){
+    document.getElementById("myMap").src="images/"+x+".png";}
+</script>
+  
+</html>
