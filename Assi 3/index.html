@@ -1,46 +1,84 @@
 <!DOCTYPE html>
-<!--
-Created using JS Bin
-http://jsbin.com
-
-Copyright (c) 2018 by ruixie123 (http://jsbin.com/mimojuv/2/edit)
-
-Released under the MIT license: http://jsbin.mit-license.org
--->
-<meta name="robots" content="noindex">
-
 <html>
-<head>
-  <title>RUi Xie Assignment 03</title>
-<style>
-    m3{color:black;
-    padding:0
-    margin:0}
-    m5{color:grey
-    padding:0
-    margin:0}
-  </style>
-</head>
+    
+    <head>
+    <title>RX Assignment 3</title>
+       </head>
+    
+    <style>
+        ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #EC7063;
+}
+li {
+    float: left;
+    border-right:1px solid #bbb;
+}
+li:last-child {
+    border-right: none;
+}
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+li a:hover:not(.active) {
+    background-color: #EC7063;
+}
+.active {
+    background-color: #EC7063;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+li {
+    float: left;
+}
+li a {
+    display: block;
+    padding: 15px;
+    background-color:#EC7063;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+    </style>
+    
 <body>
-  <h3>Assignment 03</h3>
-  <h5>Rui Xie</h5>
-
-  <br>
-  <a href="#" onclick="changeMap('basemapLandcover')">Basemap</a> </br>
-  <br>
-  <a href="#" onclick ="changeMap('iowaBorder')">Iowa Board</a></br>
-  <br>
-<a href="#" onclick="changeMap('nativeAmericanLand')">nativeAmericanLand</a></br>
-<br>
-<a href="#" onclick="changeMap('Interstate')">Interstate Highway</a></br>
-<br>
-<a href="#" onclick="changeMap('vineyards')">Vineyards</a></br>
-
-<img id="myMap" src="images/basemapLandcover.png" alt="basemapLandcover" width ="600" height="400">
-</body>
-<script>
-function changeMap(x){
-    document.getElementById("myMap").src="images/"+x+".png";}
-</script>
   
-</html>
+  <h3>Assignment 3</h3>
+	<h5>Rui Xie</h5>
+   <br>
+  <br>
+    
+<ul>
+  <li><a href="#" onclick="changeMap('Basemap')">Basemap</a></li>
+  <li><a href="#" onclick="changeMap('Iowa Board')">Iowa Border</a></li>
+  <li><a href="#" onclick="changeMap('nativeAmericanLands')">nativeAmericanLands</a></li>
+  <li><a href="#" onclick="changeMap('Interstate Highway')">Interstate Highway</a></li>
+  <li><a href="#" onclick="changeMap('Vineyards')">Vineyards</a></li>
+  </ul>
+  
+   <br>
+
+  <img id="myMap" src="Images/basemapLandcover.png" alt="basemapLandcover" width ="600" height="400">
+  
+</body>
+    <script>
+        
+        function changeMap(x) {
+            document.getElementById("myMap").src = "Images/"+ x +".png";
+        }
+        //changeMap("vineyards")
+    </script>
+</html> 
