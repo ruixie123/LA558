@@ -62,21 +62,20 @@ ul {
   <br>
     
 <ul>
-  <li><a href="#" onclick="changeMap('Basemap')">Basemap</a></li>
-  <li><a href="#" onclick="changeMap('Iowa Board')">Iowa Border</a></li>
+  <li><a href="#" onclick="changeMap('basemapLandcover')">Basemap</a></li>
+  <li><a href="#" onclick="changeMap('iowaBoarder')">Iowa Border</a></li>
   <li><a href="#" onclick="changeMap('nativeAmericanLands')">nativeAmericanLands</a></li>
-  <li><a href="#" onclick="changeMap('Interstate Highway')">Interstate Highway</a></li>
-  <li><a href="#" onclick="changeMap('Vineyards')">Vineyards</a></li>
+  <li><a href="#" onclick="changeMap('Interstate')">Interstate Highway</a></li>
+  <li><a href="#" onclick="changeMap('vineyards')">Vineyards</a></li>
   </ul>
   
    <br>
 
-  <img id="myMap" src="Image/basemapLandcover.png" alt="basemapLandcover" width ="600" height="400">
+  <img id="myMap" src="Images/basemapLandcover.png" alt="basemapLandcover" width ="600" height="400">
   
 </body>
    <script>
 function changeMap(x){
     document.getElementById("myMap").src="Image/"+x+".png";}
-	   //changeMap("vineyards")
 </script>
 </html> 
