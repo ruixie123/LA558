@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by ruixie123 (http://jsbin.com/zijuhif/3/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+<meta name="description" content="Taggart Playground 2">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Playground 2</title>
+</head>
+<body>
+  <h2> Playground 2 </h2>
+  <h3> Rui Xie
+  </h3>
+  <hr>
+ 
+  <div id="Do you know about Suzhou?">
+  <p>
+    Do you know about Suzhou?
+  </p>
+     <input type="radio" name="knowledge" id="soMuch" onchange= "knowledgeFunction()">Yes, I heard about that place before.<br>
+    <p id="horseTeach" style="display:none">Glad to hear that!</p>
+    <input type="radio" name="knowledge" id="soMuch" onchange= "knowledgeFunction()">No, I never heard about that place before.<br>
+
+
+    <br><hr>
+    <div id="references">
+    <p>
+      Which season you like best?
+    </p>
+
+   <form action="">
+     <input type="checkbox" name="language" id="Les Miserables" onclick="myFunction1()"> Spring<br>
+     <input type="checkbox" name="language" id="Charlie and the Chocolate Factory" onclick="myFunction2()"> Summer<br>
+     <input type="checkbox" name="language" id="Shrek" onclick="myFunction3()"> Fall<br>
+     <input type="checkbox" name="language" id="Shrek" onclick="myFunction3()"> Winter<br>
+    <br>
+<hr>
+Where is your hometown? <br>
+    <input type="text" name="testingTextBox" value="">
+    
+    
+
+<p>Check out this map of my hometown Suzhou!</p>
+<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=120.22304534912111%2C31.125554264324553%2C120.86917877197267%2C31.50509289134514&amp;layer=mapnik&amp;marker=31.315514771622293%2C120.54611206054688" style="border: 1px solid black"></iframe><br/><small>
+<script id="jsbin-javascript">
+function knowledgeFunction() {
+  var checkBox =document.getElementById("soMuch");
+  var text = document.getElementById("horseTeach");
+  if(checkBox.checked === true){
+    text.style.display="block";
+  }else{
+    text.style.display="none";
+  }
+}
+
+function knowledgeFunction2() {
+  var checkBox =document.getElementById("Little");
+  var text = document.getElementById("littleTeach");
+  if(checkBox.checked === true){
+    text.style.display="block";
+  }else{
+    text.style.display="none";
+  }
+}
+
+function knowledgeFunction3() {
+  var checkBox =document.getElementById("none");
+  var text = document.getElementById("noneTeach");
+  if(checkBox.checked === true){
+    text.style.display="block";
+  }else{
+    text.style.display="none";
+  }
+}
+
+function knowledgeFunction4() {
+  var checkBox =document.getElementById("what");
+  var text = document.getElementById("whatTeach");
+  if(checkBox.checked === true){
+    text.style.display="block";
+  }else{
+    text.style.display="none";
+  }
+}
+
+            
+function musicFunction() {
+  var musicSelection = document.querySelector('input[name="music"]:checked').value
+  console.log(musicSelection);
+}
+
+function myInput(){
+  var text;
+}
+
+
+</script>
+</body>
+</html>
