@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by anonymous (http://jsbin.com/bowoyojuhe/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Assignment 6: JQuery Playground</title>
+  <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+  
+<style id="jsbin-css">
+.brown {
+	color: brown;
+}
+.red {
+	color: red;
+}
+.black {
+	color: black;
+}
+.green {
+	color: green;
+}
+
+#panel, #flip {
+    padding: 10px;
+    text-align: center;
+    background-color: #e6eeff;
+    border: solid 1px #d3c3c3;
+}
+
+#panel {
+    padding: 80px;
+    display: none;
+}
+
+h3 {
+  color: #ff944d;
+]
+</style>
+</head>
+  
+<body>
+<!--Example 5 vanishing act div-->
+<div id="bodyContent">
+
+
+<h2>Assignment 6: JQuery Playground</h2>
+  <l>rui xie</l><br><br>
+  
+<h3>Example 1 change color</h3><br>
+<strong><span id = 'clickcolor'>Change color</span></strong><br>
+Click 
+<span class = "blue">blue</span>,
+<span class = "yellow">yellow</span>,
+<span class = "black">black</span> or 
+<span class = "green">green</span>
+to change color. <br>
+
+<br>
+<br>
+  
+<h3>Example 2 hide </h3>
+<p id="test">Hide this sentence.</p>
+
+<button id="button1">Click me to hide the sentence</button><br><br>
+
+<h3>Example 3</h3>  
+<div id="flip">Click to slide the panel down or up</div>
+<div id="panel">Have a nice day!</div>
+
+<h3>Example 4</h3>
+<button id="button4">Click me!</button>
+  </div>
+  <p id="button4"></p>
+
+<script id="jsbin-javascript">
+$(document).ready(function(){
+   
+	
+	//Example 1: Change color <span>
+	$(".blue").click(function(){
+        $("#clickcolor").css('color', 'blue');
+    });
+  
+  $(".yellow").click(function(){
+        $("#clickcolor").css('color', 'yellow');
+    });
+	
+	$(".black").click(function(){
+        $("#clickcolor").css('color', 'black');
+    });
+	
+	$(".green").click(function(){
+        $("#clickcolor").css('color', 'green');
+    });
+	
+	
+});
+
+  //Example 2: Hide using #id selector
+  $(document).ready(function(){
+    $("#button1").click(function(){
+        $("#test").hide();
+    });
+});
+
+  //Example 3: Slide effect
+  $(document).ready(function(){
+    $("#flip").click(function(){
+        $("#panel").slideToggle("slow");
+    });
+});
+
+  //Example 4: The vaninishing act
+$("#button4").click(function(){
+    $("#bodyContent").hide();
+  $("#button4").html("button4!");
+    });
+
+</script>
+</body>
+
+</html>
