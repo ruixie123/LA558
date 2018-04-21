@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by ruixie123 (http://jsbin.com/dedotep/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" /> <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  
+  <script src="https://indicator.extension.iastate.edu/classes/leaflet-ajax-gh-pages/dist/leaflet.ajax.min.js"></script>
+  
+  <title>Assignment 14 rui xie</title>
+<style id="jsbin-css">
+#map {
+     position: relative;
+     width: 900px;
+     height: 600px;
+     margin-right: 20px;
+	   margin-left: 20px;
+     margin-bottom: 20px;
+}
+
+#container{
+	width: 940px;
+  height: 900px;
+	margin-right: 2px;
+	margin-left: 2px;
+  background-color: tan;
+  border-color:blue;
+  border-style: dotted;
+  border-width: 1px; }
+
+#header {
+	clear: both;
+	padding: 20px;
+	background-color: tan;
+	color: blue;
+
+}
+
+
+</style>
+</head>
+  <div id="container">
+  <div id = "header">
+<body style="font-family:Helvetica;">
+  <h2>Assignment 14</h2>
+  <h4>Weather map using NWS COOP Climatology for IA</h4>
+  <p>Rui Xie</p>
+  </div>
+<div id='map'></div>
+    </div>
+</style>
+</head>
+<body>
+  <div id="map"></div>
+<br>
+
+<script id="jsbin-javascript">
+// OpenStreetMap layer
+var OSM =
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 18
+});
+/*
+map.doubleClickZoom.enable();
+*/
+//base maps
+var Esri_WorldPhysical = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
+	maxZoom: 8
+});
+var Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+	maxZoom: 16
+});
+var NASAGIBS_ViirsEarthAtNight2012 = L.tileLayer('https://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}', {
+	attribution: 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+	bounds: [[-85.0511287776, -179.999999975], [85.0511287776, 179.999999975]],
+	minZoom: 1,
+	maxZoom: 8,
+	format: 'jpg',
+	time: '',
+	tilematrixset: 'GoogleMapsCompatible_Level'
+});
+// Overlay Layers
+var Stamen_TonerLines = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lines/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 20,
+	ext: 'png'
+});
+var Stamen_TonerLabels = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-labels/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 20,
+	ext: 'png'
+});
+// Layer Group in the Americas
+var America1= L.marker([39.0119,-98.4842]).bindPopup("US"),
+				America2= L.marker([64.2008,-149.4937]).bindPopup("Alaska"),
+			America3 = L.marker([9.7489,-83.7534]).bindPopup("Costa Rica"),
+    America4 = L.marker([18.1096,-77.2975]).bindPopup("Jamaica");
+var americaPoints = L.layerGroup([America1, America2, America3, America4]);
+var map = L.map('map', {
+  center: new L.LatLng(31.9686,-99.9018),
+  zoom: 2,
+  layers: [Esri_NatGeoWorldMap]
+});
+myURL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
+//default rendering options
+var geojsonMarkerOptions = {
+  color: "#000",
+  weight: 0, //set this to one to add a black outline to each marker
+  opacity: 1,
+  fillOpacity: 0.3
+};
+//set color of circle
+function getColor(d) {
+  return d > 5 ? '#FF0000' : //red
+    d > 3 ? 'yellow' :
+    d > 1 ? 'grey' :
+    '#FFFFFF'; //white
+}
+var geojsonLayer = new L.GeoJSON.AJAX(myURL, {
+  pointToLayer: function(feature, latlng) {
+    return new L.CircleMarker(latlng, geojsonMarkerOptions);
+  },
+  style: function(feature) {
+    //console.log(feature.properties.mag);//note this is how you access contents of each quake within L.geoJson
+    return {
+      radius: feature.properties.mag * 1.5,
+      fillColor: getColor(feature.properties.mag)
+    };
+  },
+  onEachFeature: function(feature, layer) {
+    layer.bindPopup("Mag: " + feature.properties.mag + "<br> Place: " + feature.properties.place);
+  }
+}).addTo(map);
+// Number of earhtquakes
+$.ajax({
+  url: myURL,
+  dataType: 'json',
+}).done(function(data) {
+  totalNumber = data.features.length;
+  $("#totalNumber").html(totalNumber);
+});
+$('#clearLayers').click(function() {
+  map.removeLayer(geojsonLayer);
+});
+
+var pointA = new L.LatLng(34.0522, -118.2437);
+var pointB = new L.LatLng(40.7128, -74.0060);
+var pointList = [pointA, pointB];
+
+var firstpolyline = new L.Polyline(pointList, {
+    color: 'purple',
+    weight: 5,
+    opacity: 0.5,
+    smoothFactor: 1
+});
+firstpolyline.addTo(map);
+
+
+
+// Layer Control
+var baseMaps = {
+  "Open Street Map": OSM,
+  "ESRI  World Physical": Esri_WorldPhysical,
+	 "National Geographic Map": Esri_NatGeoWorldMap,
+  "The Night Sky": NASAGIBS_ViirsEarthAtNight2012
+};
+var overlayMaps = {
+	 "Polyline": firstpolyline,
+  "Lines": Stamen_TonerLines,
+  "America Spots": americaPoints,
+  "Labels":Stamen_TonerLabels,
+ "Earthquakes": geojsonLayer
+};
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+
+</script>
+</body>
+</html>
