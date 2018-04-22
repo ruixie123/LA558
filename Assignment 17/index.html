@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by ruixie123 (http://jsbin.com/qogozul/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+  <head>
+
+<meta name="description" content="LA 458/558 21b Leaflet Geocoding via Google API ruixie" />
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" /> 
+	  
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+	
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+	  
+  <style id="jsbin-css">
+#map { 
+			position:relative;
+   width: 900px;
+	  height: 300px;
+			margin: 40px; 
+			padding: 10px;
+   margin-right: auto;
+	  margin-left: auto;
+	  
+	
+	}
+#header, #footer {
+	clear: both;
+	padding: 15px;
+	background-color: white;
+	color: green;
+	text-align: left;
+}
+
+#container {
+	background-color: white;
+  text-align: center;
+	width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+   border-style: solid;
+   border-width: 50px;
+}
+
+
+</style>
+</head>
+  <body>
+	  
+			
+			<div id="container">
+     <div id = "header">
+        <h2>Rui Xie LA 458 </h2>
+        <h3> Assignment 17: Address Geocoding</h3>
+     </div><br>
+	 <div>
+	  Query address: <input type="text" value = "1206 South 4TH ST, Ames, IA 50010" id="myAddress">
+	  <button type="button" id='geocode'> SHOW ME THE LOCATION</button><br><br>
+     <div id="address"></div>
+
+<div id="map"></div>		
+  <script id="jsbin-javascript">
+console.clear();
+
+var map = L.map('map').setView([43, -93], 3);
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+}).addTo(map);
+
+
+$('#geocode').click(function () {
+    myAddress = encodeURI($('#myAddress').val());
+ 
+    var geocodingAPI_URL = "http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address="+myAddress+"&benchmark=9&format=json";
+
+
+    var geocodingAPI_URL = "http://maps.googleapis.com/maps/api/geocode/json?address=" + myAddress + "&sensor=true";
+
+    console.log(geocodingAPI_URL);
+
+     //Start Geocoding
+    $.getJSON(geocodingAPI_URL, function (json) {
+        //console.log(json.results[0].address_components);
+        //console.log(json.status);
+        var address = json.results[0].formatted_address;
+        var lat = json.results[0].geometry.location.lat;
+        var long = json.results[0].geometry.location.lng;
+        console.log(address);
+        console.log(lat);
+        console.log(long);
+        var county = '';
+        $.each(json.results[0].address_components, function (i, jsonData) {
+            level = jsonData.types[0];
+            if ('administrative_area_level_2' === level.toLowerCase()) {
+                county = (jsonData.short_name);
+            }
+        });
+        console.log("I am in " + county + "!");
+
+
+//now add the marker to the map
+        var marker = L.marker([lat, long], {
+            draggable: false,
+            title: address, 
+            opacity: 0.75
+        }).addTo(map);
+        marker.bindPopup(address +" <br>" + "County: " + county +',<br>'+ "Lat: " + lat +"<br>Long: " +long).openPopup();
+		
+		map.setView([lat, long]);
+    });
+}); //end geocode click function
+
+</script>
+</body>
+</html>
