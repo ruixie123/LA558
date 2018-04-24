@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by ruixie123 (http://jsbin.com/jubilux/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+<meta name="description" content="LA 458 Lucas Haffner Assignment 18">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+	
+
+<!--External Data-->	
+<script src="https://indicator.extension.iastate.edu/z_cjs/teachingGIS/webGIS/studentFeaturesDB.php?userID=ruixie&theFunction=responseVar"></script>
+	
+
+	
+<!--External CSS-->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	
+	<link rel="stylesheet" href="http://129.186.142.145/indicators/classes/leaflet-awesome-markers/dist/leaflet.awesome-markers.css">
+	
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	
+	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+	
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" />
+	
+	
+	<!--External JS-->	
+	<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
+	
+
+   <script src="http://129.186.142.145/indicators/classes/leaflet-awesome-markers/dist/leaflet.awesome-markers.js"></script>	
+	
+		<script src="https://indicator.extension.iastate.edu/classes/leaflet-ajax-gh-pages/dist/leaflet.ajax.min.js"></script>
+	
+	
+	
+	
+	
+	
+	
+<style id="jsbin-css">
+html, body, 
+
+#map { 
+			position:relative;
+   width: 650px;
+	  height: 400px;
+			margin: 40px; 
+			padding: 0px;
+   margin-right: auto;
+	  margin-left: auto;
+	  
+	
+	}
+#header, #footer {
+	clear: both;
+	padding: 15px;
+	background-color: tan;
+	color: brown;
+	text-align: left;
+}
+
+#container {
+	background-color: tan;
+ text-align: center;
+	width: 800px;
+	height: 850px;
+	margin-right: auto;
+	margin-left: auto;
+ border-style: solid;
+ border-width: 30px;
+}
+
+</style>
+</head>
+<body>
+	
+	<div id="container">
+     <div id = "header">
+        <h2>Rui Xie LA 458 </h2>
+        <h3> Assignment 18: Database Retrieval</h3>
+     </div><br>
+		
+<div id="map"></div>
+	Category: <input id = 'field1'> <br>
+	Title: <input id = 'field2'> <br>
+	Text: <input id = 'field3'> <br>
+	<input type="checkbox" id="addMarkReady" value="X"> Ready to add marker on map click	 
+
+<div id="map"></div>
+</div>
+	
+
+	
+
+	
+
+<script id="jsbin-javascript">
+console.clear();
+
+var userID = 'ruixie';
+
+//get the existing data from the server by adding the following in the <head>
+
+//or you can use the URL below and the leaflet ajax plugin
+
+var responseURL = "https://indicator.extension.iastate.edu/z_cjs/teachingGIS/webGIS/studentFeaturesDB.php?userID=" + userID + "&theFunction=response";
+
+console.log(responseURL);
+
+
+var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+});
+
+
+var map = L.map('map').setView([42.0, -93.634], 13);
+osm.addTo(map);
+map.on('click', addMarker);
+
+
+
+
+//Add the marker to the map and DB
+function addMarker(e) {
+
+
+
+  if ($("#addMarkReady").is(':checked')) {
+
+    field1 = $("#field1").val();
+    field2 = $("#field2").val();
+    field3 = $("#field3").val();
+    // Add marker to map at click location; add popup window
+    var newMarker = new L.marker(e.latlng)
+      .bindPopup("<strong>" + field2 + "</strong><br>" + field3)
+      .bindTooltip(field1)
+      .addTo(map);
+
+    latitude = e.latlng.lat;
+    longitude = e.latlng.lng;
+
+    var myData = "field1=" + field1 + "&field2=" + field2 + "&field3=" + field3 + "&latitude=" + latitude + "&longitude=" + longitude;
+
+    jQuery.ajax({
+      type: "POST", // HTTP method POST or GET
+      url: "https://indicator.extension.iastate.edu/z_cjs/teachingGIS/webGIS/studentFeaturesDB.php?userID=" + userID + "&theFunction=insert", //Where to make Ajax calls
+      dataType: "text", // Data type, HTML, json etc.
+      data: myData, //Form variables
+      success: function(response) {
+        //console.log(response);
+
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+      }
+
+    }); //end ajax post
+
+
+  }
+
+
+}
+
+
+
+
+
+//Load existing points as circles from var locations. This is initially loaded in a <head><script>
+var geojsonLayer1 = L.geoJSON(locations, {
+  pointToLayer: function(feature, latlng) {
+    return L.circleMarker(latlng, {
+      radius: 5,
+      fillColor: "yellow",
+      color: "#000",
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.8
+    }).bindPopup(feature.properties.field1).openPopup();
+  }
+}).addTo(map);
+
+
+
+
+//*******OR directly via the Leaflet AJAX plugin**************
+
+
+var geojsonLayer2 = new L.GeoJSON.AJAX(responseURL, {
+  pointToLayer: function(feature, latlng) {
+    return new L.CircleMarker(latlng, {
+      stroke: true,
+      weight: 2, //stroke weight
+      color: '#000000', //stroke color
+      opacity: 1.0, //stoke opacity
+      fillColor: 'blue',
+      fillOpacity: 0.5,
+      radius: 12
+    }).bindPopup(feature.properties.field2).openPopup();
+  }
+});
+
+
+
+//*******OR as icons**************
+
+
+
+var golfIcon = L.AwesomeMarkers.icon({
+  prefix: 'glyphicon', //bootstrap
+  markerColor: 'white', // see colors above
+  iconColor: 'green',
+  icon: 'flag'
+});
+
+var soccerIcon = L.AwesomeMarkers.icon({
+  prefix: 'fa', //font awesome rather than bootstrap
+  markerColor: 'red',
+  icon: 'fa-futbol-o'
+});
+
+var greenIcon = L.AwesomeMarkers.icon({
+  prefix: 'fa',
+  markerColor: 'green'
+});
+
+var redIcon = L.AwesomeMarkers.icon({
+  prefix: 'fa',
+  markerColor: 'red'
+});
+
+
+
+
+
+// var version loading in specified icons
+var geojsonLayer1b = L.geoJSON(locations, {
+  pointToLayer: function(feature, latlng) {
+    return L.marker(latlng, {
+        icon: golfIcon
+      })
+      .on('mouseover', function() {
+        this.bindPopup(feature.properties.field1).openPopup();
+      });
+  }
+});
+
+
+
+
+
+function getIcon(d) {
+  return d == 'soccer' ? soccerIcon :
+    d == 'golf' ? golfIcon :
+    d == 'red' ? redIcon :
+    greenIcon;
+}
+
+var geojsonLayer2b = new L.GeoJSON.AJAX(responseURL, {
+  pointToLayer: function(feature, latlng) {
+    return L.marker(latlng, {
+        icon: getIcon(feature.properties.field1)
+      })
+      .on('mouseover', function() {
+        this.bindPopup("<strong>" + feature.properties.field2 + "</strong><br>" + feature.properties.field3).openPopup();
+      });
+  }
+}).addTo(map);
+
+
+
+
+
+
+//******************
+
+//layer Control
+
+var baseMaps = {
+  "OSM": osm,
+};
+
+var overlayMaps = {
+  "Loaded as variable": geojsonLayer1,
+  "Loaded as variable & icons": geojsonLayer1b,
+  "Loaded with plugin": geojsonLayer2,
+  "Loaded with plugin & icons": geojsonLayer2b
+};
+
+
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+</script>
+</body>
+</html>
